@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RHINO Labs — Creator Monetization Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0D1B2A;
+    --navy-mid: #16293D;
+    --navy-light: #1E3550;
+    --silver: #B8C4D0;
+    --silver-light: #D6DDE4;
+    --silver-pale: #EEF1F4;
+    --white: #F7F9FB;
+    --accent-silver: #C8D6E0;
+    --text-muted: #8A9BAD;
+    --divider: rgba(184,196,208,0.18);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--silver-light);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 24px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(13,27,42,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--divider);
+  }
+
+  .nav-logo {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--silver-light);
+  }
+
+  .nav-logo span {
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.1em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.25s;
+  }
+
+  .nav-links a:hover { color: var(--silver-light); }
+
+  .nav-cta {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--navy);
+    background: var(--silver-light);
+    padding: 10px 24px;
+    text-decoration: none;
+    transition: background 0.25s;
+  }
+
+  .nav-cta:hover { background: var(--white); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 140px 48px 100px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(184,196,208,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .hero-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 0.5px;
+    background: var(--text-muted);
+  }
+
+  .hero-headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(44px, 5.5vw, 72px);
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 28px;
+    letter-spacing: -0.01em;
+  }
+
+  .hero-headline em {
+    font-style: italic;
+    color: var(--silver);
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--text-muted);
+    line-height: 1.85;
+    margin-bottom: 48px;
+    max-width: 440px;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+
+  .btn-primary {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--navy);
+    background: var(--silver-light);
+    padding: 14px 36px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.25s;
+  }
+
+  .btn-primary:hover { background: var(--white); }
+
+  .btn-ghost {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.25s;
+  }
+
+  .btn-ghost:hover { color: var(--silver-light); }
+
+  .btn-arrow {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .hero-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 32px;
+  }
+
+  .hero-stat-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--divider);
+    border: 0.5px solid var(--divider);
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .hero-stat {
+    background: var(--navy-mid);
+    padding: 32px 28px;
+  }
+
+  .hero-stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 42px;
+    color: var(--white);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .hero-stat-label {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .hero-badge {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border: 0.5px solid var(--divider);
+    padding: 10px 20px;
+    display: inline-block;
+    align-self: flex-start;
+  }
+
+  /* SECTION BASE */
+  section {
+    padding: 120px 48px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .full-width-section {
+    max-width: none;
+    padding: 120px 48px;
+  }
+
+  .section-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .divider-line {
+    width: 100%;
+    height: 0.5px;
+    background: var(--divider);
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 0.5px;
+    background: var(--text-muted);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(34px, 4vw, 56px);
+    line-height: 1.15;
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+
+  .section-title em {
+    font-style: italic;
+    color: var(--silver);
+  }
+
+  /* WHAT WE DO */
+  .what-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+    margin-top: 80px;
+  }
+
+  .what-left {}
+
+  .what-intro {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--silver-light);
+    line-height: 1.8;
+    margin-bottom: 40px;
+  }
+
+  .what-detail {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.9;
+  }
+
+  .what-right {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--divider);
+    border: 0.5px solid var(--divider);
+  }
+
+  .what-item {
+    background: var(--navy-mid);
+    padding: 32px 36px;
+    transition: background 0.25s;
+  }
+
+  .what-item:hover { background: var(--navy-light); }
+
+  .what-item-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.12em;
+    margin-bottom: 12px;
+  }
+
+  .what-item-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--silver-light);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+
+  .what-item-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+
+  /* PROCESS */
+  .process-section {
+    background: var(--navy-mid);
+  }
+
+  .process-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+    margin-bottom: 80px;
+  }
+
+  .process-intro-text {
+    font-size: 15px;
+    color: var(--text-muted);
+    line-height: 1.85;
+    padding-top: 20px;
+  }
+
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--divider);
+    border: 0.5px solid var(--divider);
+  }
+
+  .process-step {
+    background: var(--navy-mid);
+    padding: 36px 28px;
+    position: relative;
+  }
+
+  .process-step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 36px;
+    color: rgba(184,196,208,0.15);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .process-step-title {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--silver-light);
+    margin-bottom: 12px;
+  }
+
+  .process-step-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.75;
+  }
+
+  /* MODEL */
+  .model-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 80px;
+  }
+
+  .model-right {}
+
+  .model-box {
+    background: var(--navy-mid);
+    border: 0.5px solid var(--divider);
+    padding: 48px;
+  }
+
+  .model-box-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 32px;
+    color: var(--white);
+    margin-bottom: 24px;
+    line-height: 1.2;
+  }
+
+  .model-box-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.9;
+    margin-bottom: 32px;
+  }
+
+  .model-highlight {
+    border-top: 0.5px solid var(--divider);
+    padding-top: 28px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.8;
+  }
+
+  .model-highlight strong {
+    color: var(--silver-light);
+    font-weight: 500;
+  }
+
+  .model-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .model-list li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    font-size: 15px;
+    color: var(--silver-light);
+    line-height: 1.7;
+  }
+
+  .model-list li::before {
+    content: '';
+    display: block;
+    width: 4px;
+    height: 4px;
+    background: var(--text-muted);
+    border-radius: 50%;
+    margin-top: 10px;
+    flex-shrink: 0;
+  }
+
+  /* BRAND/EXIT */
+  .extra-section {
+    border-top: 0.5px solid var(--divider);
+  }
+
+  .extra-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--divider);
+    border: 0.5px solid var(--divider);
+    margin-top: 80px;
+  }
+
+  .extra-card {
+    background: var(--navy);
+    padding: 48px 44px;
+  }
+
+  .extra-card-label {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+
+  .extra-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: 28px;
+    color: var(--white);
+    margin-bottom: 20px;
+    line-height: 1.2;
+  }
+
+  .extra-card-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.85;
+    margin-bottom: 28px;
+  }
+
+  .extra-features {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .extra-feature {
+    font-size: 13px;
+    color: var(--silver);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .extra-feature::before {
+    content: '';
+    display: block;
+    width: 16px;
+    height: 0.5px;
+    background: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  /* TRUST / WHY */
+  .trust-section {}
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    margin-top: 80px;
+  }
+
+  .trust-card {
+    padding: 40px 36px;
+    border: 0.5px solid var(--divider);
+    position: relative;
+    transition: border-color 0.3s;
+  }
+
+  .trust-card:hover {
+    border-color: rgba(184,196,208,0.35);
+  }
+
+  .trust-card-icon {
+    width: 32px;
+    height: 0.5px;
+    background: var(--text-muted);
+    margin-bottom: 28px;
+  }
+
+  .trust-card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--silver-light);
+    margin-bottom: 16px;
+  }
+
+  .trust-card-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.85;
+  }
+
+  /* QUOTE */
+  .quote-section {
+    background: var(--navy-mid);
+    text-align: center;
+  }
+
+  .quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(22px, 3vw, 38px);
+    color: var(--white);
+    line-height: 1.5;
+    max-width: 820px;
+    margin: 0 auto 32px;
+    letter-spacing: -0.005em;
+  }
+
+  .quote-attr {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  /* CTA */
+  .cta-section {
+    text-align: center;
+    padding: 140px 48px;
+  }
+
+  .cta-label {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .cta-label::before, .cta-label::after {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 0.5px;
+    background: var(--text-muted);
+  }
+
+  .cta-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(38px, 5vw, 68px);
+    color: var(--white);
+    margin-bottom: 24px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .cta-sub {
+    font-size: 15px;
+    color: var(--text-muted);
+    max-width: 440px;
+    margin: 0 auto 48px;
+    line-height: 1.8;
+  }
+
+  .cta-actions {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 0.5px solid var(--divider);
+    padding: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .footer-brand {
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .footer-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* SCROLL ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .hero-content > * {
+    animation: fadeUp 0.9s ease forwards;
+  }
+
+  .hero-content > *:nth-child(1) { animation-delay: 0.1s; }
+  .hero-content > *:nth-child(2) { animation-delay: 0.25s; }
+  .hero-content > *:nth-child(3) { animation-delay: 0.4s; }
+  .hero-content > *:nth-child(4) { animation-delay: 0.55s; }
+
+  .hero-right > * {
+    animation: fadeUp 0.9s ease forwards;
+  }
+  .hero-right > *:nth-child(1) { animation-delay: 0.4s; }
+  .hero-right > *:nth-child(2) { animation-delay: 0.6s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    .hero, section, .full-width-section { padding-left: 24px; padding-right: 24px; }
+    .hero-grid, .what-grid, .model-grid, .process-header, .extra-grid { grid-template-columns: 1fr; gap: 48px; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .trust-grid { grid-template-columns: 1fr; }
+    .hero-right { align-items: flex-start; }
+    footer { flex-direction: column; gap: 16px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">RHINO Labs <span>/ CMA</span></div>
+  <ul class="nav-links">
+    <li><a href="#what">Architecture</a></li>
+    <li><a href="#process">Prozess</a></li>
+    <li><a href="#model">Modell</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Gespräch anfragen</a>
+</nav>
+
+<!-- HERO -->
+<div style="border-bottom: 0.5px solid var(--divider);">
+  <div style="max-width: 1200px; margin: 0 auto; padding: 0 48px;">
+    <div class="hero" style="padding-left: 0; padding-right: 0;">
+      <div class="hero-grid" style="max-width: none; width: 100%;">
+        <div class="hero-content">
+          <p class="hero-eyebrow">Revenue Hypergrowth Infrastructure</p>
+          <h1 class="hero-headline">
+            Deine Audience<br>
+            verdient <em>echtes</em><br>
+            Einkommen.
+          </h1>
+          <p class="hero-sub">
+            Creator Monetization Architecture ist kein Tool und kein Template. Es ist ein strukturiertes System, das um deine Reichweite herum gebaut wird — präzise, nachhaltig, ohne Upfront-Kosten.
+          </p>
+          <div class="hero-actions">
+            <a href="#contact" class="btn-primary">Gespräch starten</a>
+            <a href="#process" class="btn-ghost">Wie es funktioniert <span class="btn-arrow">↓</span></a>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="hero-stat-block">
+            <div class="hero-stat">
+              <div class="hero-stat-num">0%</div>
+              <div class="hero-stat-label">Upfront-Kosten</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">2%</div>
+              <div class="hero-stat-label">Konservative Conversion</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">100%</div>
+              <div class="hero-stat-label">Auf deine Nische zugeschnitten</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num">Rev.</div>
+              <div class="hero-stat-label">Share — wir verdienen mit dir</div>
+            </div>
+          </div>
+          <div class="hero-badge">Performance-Aligned — kein Retainer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT WE DO -->
+<section id="what">
+  <p class="section-label fade-in">Was wir aufbauen</p>
+  <h2 class="section-title fade-in">Creator Monetization<br><em>Architecture.</em></h2>
+  <div class="what-grid">
+    <div class="what-left fade-in">
+      <p class="what-intro">
+        Du hast bereits das Wertvollste aufgebaut: eine Audience, die zuhört. Was meistens fehlt, ist kein mehr Aufwand — sondern die richtige Infrastruktur.
+      </p>
+      <p class="what-detail">
+        Wir bauen diese Infrastruktur gemeinsam mit dir. Kein generischer Kurs, keine Schablone. Jedes Produkt, jedes Skript, jede Sequenz ist spezifisch für deine Nische, deinen Ton, deine Community gebaut.
+        <br><br>
+        Das Ziel ist eine Monetarisierungsstruktur, die auch dann weiterarbeitet, wenn du es nicht tust. Passiv in der Wirkung. Menschlich im Auftritt.
+      </p>
+    </div>
+    <div class="what-right fade-in">
+      <div class="what-item">
+        <div class="what-item-num">01</div>
+        <div class="what-item-title">Produkt-Entwicklung</div>
+        <div class="what-item-desc">Wir entwickeln digitale Produkte mit KI-Systemen und erprobten Frameworks — passgenau für deine Nische. Keine generischen Kurse. Kein Copy-Paste.</div>
+      </div>
+      <div class="what-item">
+        <div class="what-item-num">02</div>
+        <div class="what-item-title">Free Value First</div>
+        <div class="what-item-desc">Bevor etwas verkauft wird, bekommt deine Audience echten Mehrwert. Das schafft organisches Vertrauen — und macht den Sale zum natürlichen nächsten Schritt.</div>
+      </div>
+      <div class="what-item">
+        <div class="what-item-num">03</div>
+        <div class="what-item-title">Authority Positioning</div>
+        <div class="what-item-desc">Jeder Output — Produkt, Content, Kommunikation — positioniert dich als Stimme, der man zuhört. Durch Qualität, nicht durch Hype.</div>
+      </div>
+      <div class="what-item">
+        <div class="what-item-num">04</div>
+        <div class="what-item-title">Permanente Infrastruktur</div>
+        <div class="what-item-desc">Einmal live, arbeitet das System weiter. Neue Buyer kommen ohne zusätzlichen Aufwand von dir. Skalierung durch Struktur, nicht durch Stress.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- PROCESS -->
+<div class="full-width-section process-section" id="process">
+  <div class="section-inner">
+    <div class="process-header">
+      <div>
+        <p class="section-label fade-in">Der Prozess</p>
+        <h2 class="section-title fade-in">Fünf Schritte.<br><em>Ein System.</em></h2>
+      </div>
+      <p class="process-intro-text fade-in">
+        Jede Phase hat einen klaren Zweck. Nichts bewegt sich weiter, ohne dass der vorherige Schritt sitzt. Wir testen klein, bevor wir breit ausrollen — das minimiert Risiko und maximiert die Präzision jedes Angebots.
+      </p>
+    </div>
+    <div class="process-steps fade-in">
+      <div class="process-step">
+        <div class="process-step-num">01</div>
+        <div class="process-step-title">Audience Qualification</div>
+        <div class="process-step-desc">Wir stellen sicher, dass der Content die richtigen Menschen erreicht. Keine verschwendete Reichweite.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">02</div>
+        <div class="process-step-title">Demand Activation</div>
+        <div class="process-step-desc">Das Problem, das dein Produkt löst, wird zum richtigen Zeitpunkt in den Fokus gebracht — relevant, nicht aufgedrängt.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">03</div>
+        <div class="process-step-title">Launch & Conversion</div>
+        <div class="process-step-desc">Der Release ist so aufgesetzt, dass Interesse und Klarheit die meiste Arbeit übernehmen — noch bevor es live geht.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">04</div>
+        <div class="process-step-title">Secondary Capture</div>
+        <div class="process-step-desc">Nicht jeder kauft beim ersten Kontakt. Wir sorgen für einen zweiten Einstieg für alle, die interessiert, aber noch nicht bereit waren.</div>
+      </div>
+      <div class="process-step">
+        <div class="process-step-num">05</div>
+        <div class="process-step-title">Offer Infrastructure</div>
+        <div class="process-step-desc">Einmal live — dauerhaft sichtbar. Neue Buyer finden dein Angebot ohne weiteren Aufwand deinerseits.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider-line"></div>
+
+<!-- MODEL -->
+<section id="model">
+  <p class="section-label fade-in">Unser Modell</p>
+  <h2 class="section-title fade-in">Wir verdienen,<br>wenn <em>du</em> verdienst.</h2>
+  <div class="model-grid">
+    <div class="model-right">
+      <ul class="model-list fade-in">
+        <li>Keine Upfront-Kosten. Keine monatlichen Retainer.</li>
+        <li>Unser Anteil kommt ausschließlich aus dem, was wir gemeinsam generieren.</li>
+        <li>Wenn es nicht produziert, sind wir die Ersten, die es spüren — das ist der einzige Anreiz, der funktioniert.</li>
+        <li>Du gibst bei jedem Schritt dein Sign-off. Nichts bewegt sich ohne dein Okay.</li>
+        <li>Strategy, Copy, Setup — alles auf unserer Seite. Du postst weiter. Wir bauen das Fundament.</li>
+      </ul>
+    </div>
+    <div class="fade-in">
+      <div class="model-box">
+        <div class="model-box-title">Revenue Share.<br>Nicht Retainer.</div>
+        <p class="model-box-text">
+          Das Modell ist bewusst so gebaut. Ein Retainer schafft keine Alignment — er schafft eine Rechnung, unabhängig vom Ergebnis. Revenue Share stellt sicher, dass wir nur dann wachsen, wenn dein Business wächst.
+        </p>
+        <div class="model-highlight">
+          <strong>Conservative baseline:</strong> Bei einer 2% Conversion Rate auf bestehende Views ist das Umsatzpotential bereits signifikant — noch vor jeder Optimierung oder Skalierung.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- EXTRAS: BRAND & EXIT -->
+<section class="extra-section" id="extra">
+  <p class="section-label fade-in">Zusätzliche Services</p>
+  <h2 class="section-title fade-in">Wenn du mehr<br><em>willst.</em></h2>
+  <div class="extra-grid fade-in">
+    <div class="extra-card">
+      <div class="extra-card-label">Brand Deals</div>
+      <div class="extra-card-title">Sponsorships &amp;<br>Brand Outreach</div>
+      <p class="extra-card-text">Wenn Brand Deals zu deiner Situation passen, übernehmen wir den gesamten Prozess — von der Identifikation passender Brands bis zum Abschluss.</p>
+      <div class="extra-features">
+        <div class="extra-feature">Brands finden, die zu deiner Nische passen</div>
+        <div class="extra-feature">Outreach schreiben und versenden</div>
+        <div class="extra-feature">Konditionen verhandeln und strukturieren</div>
+        <div class="extra-feature">Deliverables und Payments koordinieren</div>
+      </div>
+    </div>
+    <div class="extra-card">
+      <div class="extra-card-label">Page Exit</div>
+      <div class="extra-card-title">Page Sales &amp;<br>Exit Strategy</div>
+      <p class="extra-card-text">Wenn du deinen Account verkaufen möchtest, führen wir den gesamten Prozess — Bewertung, Käufer-Akquise, Verhandlung, Clean Close.</p>
+      <div class="extra-features">
+        <div class="extra-feature">Marktgerechte Bewertung deines Accounts</div>
+        <div class="extra-feature">Seriöse Käufer finden und prüfen</div>
+        <div class="extra-feature">Deal strukturieren — Preis, Übergabe, Alles</div>
+        <div class="extra-feature">Sauberer Abschluss von A bis Z</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- TRUST -->
+<section>
+  <p class="section-label fade-in">Warum RHINO Labs</p>
+  <h2 class="section-title fade-in">Gebaut für<br><em>ernsthafte Creator.</em></h2>
+  <div class="trust-grid">
+    <div class="trust-card fade-in">
+      <div class="trust-card-icon"></div>
+      <div class="trust-card-title">Kein Universalansatz</div>
+      <p class="trust-card-text">Jedes Produkt, jede Strategie, jeder Funnel wird spezifisch für deine Nische und deine Audience entwickelt. Nichts davon könnte einem anderen Creator gehören.</p>
+    </div>
+    <div class="trust-card fade-in">
+      <div class="trust-card-icon"></div>
+      <div class="trust-card-title">Vollständige Kontrolle</div>
+      <p class="trust-card-text">Du gibst bei jedem Schritt dein Okay. Wir übernehmen die operative Last — du behältst die Entscheidungshoheit. Kein Rätselraten, keine überraschenden Moves.</p>
+    </div>
+    <div class="trust-card fade-in">
+      <div class="trust-card-icon"></div>
+      <div class="trust-card-title">Langfristige Infrastruktur</div>
+      <p class="trust-card-text">Wir bauen nichts Kurzfristiges. Das Ziel ist eine Monetarisierungsstruktur, die robust ist, skaliert und weiterarbeitet — unabhängig von Algorithmen oder Trends.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="full-width-section quote-section">
+  <div class="section-inner" style="text-align: center;">
+    <p class="quote-text">
+      "Du hast bereits das Schwierigste geschafft: eine Audience aufzubauen, die wirklich aufmerkt. Das ist der harte Teil — und du hast ihn getan."
+    </p>
+    <span class="quote-attr">Joel Mouangue — RHINO Labs</span>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section" id="contact">
+  <div class="cta-label">Bereit anzufangen</div>
+  <h2 class="cta-title fade-in">Ein Gespräch.<br>Kein Commitment.</h2>
+  <p class="cta-sub fade-in">
+    Wir schauen uns deine Situation an, du schaust dir unsere Arbeitsweise an — und wenn es auf beiden Seiten Sinn ergibt, machen wir weiter.
+  </p>
+  <div class="cta-actions fade-in">
+    <a href="mailto:contact@rhinolabs.io" class="btn-primary">Gespräch anfragen</a>
+    <a href="#what" class="btn-ghost">Nochmal von vorne <span class="btn-arrow">↑</span></a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="border-top: 0.5px solid var(--divider);">
+  <footer>
+    <div class="footer-brand">RHINO Labs · Creator Monetization Architecture</div>
+    <div class="footer-meta">© 2025 RHINO Labs. Revenue Hypergrowth Infrastructure &amp; Network Operations.</div>
+  </footer>
+</div>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
